@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Norris Enterprise - Login</title>
+    <style>
+        :root {
+            /* Color Palette */
+            --primary: #1a5276; /* Deep blue */
+            --primary-light: #2980b9; /* Lighter blue */
+            --secondary: #2c3e50; /* Dark slate */
+            --accent: #f39c12; /* Gold accent */
+            --light: #ecf0f1; /* Light gray/white */
+            --dark: #2c3e50; /* Dark slate */
+            --error: #e74c3c; /* Error red */
+            --success: #27ae60; /* Success green */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+        }
+        
+        .container {
+            display: flex;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 1000px;
+            min-height: 550px;
+            overflow: hidden;
+        }
+        
+        .info-side {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .welcome-text {
+            margin: 40px 0;
+        }
+        
+        .welcome-text h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-text p {
+            opacity: 0.8;
+            line-height: 1.7;
+        }
+        
+        .info-footer {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .form-side {
+            padding: 40px;
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .form-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-header h2 {
+            font-size: 30px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: #7f8c8d;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .form-input.error {
+            border-color: var(--error);
+        }
+        
+        .error-text {
+            color: var(--error);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+        
+        .remember-me input {
+            margin-right: 5px;
+        }
+        
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .forgot-password:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .switch-form {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .switch-form a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .switch-form a:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+        
+        #login-form {
+            display: block;
+        }
+        
+        #signup-form {
+            display: none;
+        }
+        
+        /* Password Strength Indicator */
+        .password-strength {
+            display: none;
+            margin-top: 5px;
+        }
+        
+        .strength-meter {
+            height: 4px;
+            background-color: #ddd;
+            border-radius: 2px;
+            margin-top: 8px;
+            position: relative;
+        }
+        
+        .strength-meter-fill {
+            height: 100%;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+        
+        .strength-text {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        /* Enterprise Features */
+        .enterprise-features {
+            display: flex;
+            margin-top: 20px;
+            justify-content: space-between;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .feature-icon {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                width: 95%;
+                min-height: auto;
+            }
+            
+            .info-side {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .form-side {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .welcome-text {
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-side">
+            <div>
+                <div class="logo">
+                    <div class="logo-icon">NE</div>
+                    <span>Norris Enterprise</span>
+                </div>
+                <div class="welcome-text">
+                    <h1>Welcome to Norris Enterprise Portal</h1>
+                    <p>Access your enterprise resources securely. Our platform provides streamlined workflows, comprehensive data analytics, and collaborative tools designed for business efficiency.</p>
+                </div>
+            </div>
+            <div class="info-footer">
+                <p>&copy; 2025 Norris Enterprise. All rights reserved.</p>
+            </div>
+        </div>
+        <div class="form-side">
+            <!-- Login Form -->
+            <form id="login-form">
+                <div class="form-header">
+                    <h2>Sign In</h2>
+                    <p>Access your Norris Enterprise account</p>
+                </div>
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="your@email.com" required>
+                    <div class="error-text">Please enter a valid email address</div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="Your password" required>
+                    <div class="error-text">Please enter your password</div>
+                </div>
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember-me">
+                        <label for="remember-me">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+                <div class="switch-form">
+                    <p>Don't have an account? <a href="#" id="show-signup">Sign up now</a></p>
+                </div>
+                <div class="enterprise-features">
+                    <div class="feature">
+                        <span class="feature-icon">🔒</span>
+                        <span>Secure Access</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🔄</span>
+                        <span>Cloud Sync</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">📊</span>
+                        <span>Analytics</span>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Signup Form -->
+            <form id="signup-form">
+                <div class="form-header">
+                    <h2>Create Account</h2>
+                    <p>Join Norris Enterprise platform</p>
+                </div>
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" class="form-input" placeholder="John Doe" required>
+                    <div class="error-text">Please enter your full name</div>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Work Email Address</label>
+                    <input type="email" id="signup-email" class="form-input" placeholder="your@company.com" required>
+                    <div class="error-text">Please enter a valid work email address</div>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Create Password</label>
+                    <input type="password" id="signup-password" class="form-input" placeholder="Create a strong password" required>
+                    <div class="password-strength">
+                        <div class="strength-meter">
+                            <div class="strength-meter-fill"></div>
+                        </div>
+                        <div class="strength-text">Password strength: <span id="strength-value">Weak</span></div>
+                    </div>
+                    <div class="error-text">Password must be at least 8 characters</div>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" class="form-input" placeholder="Confirm your password" required>
+                    <div class="error-text">Passwords do not match</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+                <div class="switch-form">
+                    <p>Already have an account? <a href="#" id="show-login">Sign in</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle between login and signup forms
+        document.getElementById('show-signup').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'block';
+        });
+        
+        document.getElementById('show-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        });
+        
+        // Password strength meter
+        const passwordInput = document.getElementById('signup-password');
+        const strengthMeter = document.querySelector('.strength-meter-fill');
+        const strengthText = document.getElementById('strength-value');
+        
+        passwordInput.addEventListener('focus', function() {
+            document.querySelector('.password-strength').style.display = 'block';
+        });
+        
+        passwordInput.addEventListener('input', function() {
+            const val = passwordInput.value;
+            let strength = 0;
+            let strengthLabel = '';
+            
+            if (val.length >= 8) strength += 25;
+            if (val.match(/[a-z]/) && val.match(/[A-Z]/)) strength += 25;
+            if (val.match(/\d/)) strength += 25;
+            if (val.match(/[^a-zA-Z\d]/)) strength += 25;
+            
+            strengthMeter.style.width = strength + '%';
+            
+            if (strength <= 25) {
+                strengthMeter.style.backgroundColor = '#e74c3c';
+                strengthLabel = 'Weak';
+            } else if (strength <= 50) {
+                strengthMeter.style.backgroundColor = '#f39c12';
+                strengthLabel = 'Fair';
+            } else if (strength <= 75) {
+                strengthMeter.style.backgroundColor = '#3498db';
+                strengthLabel = 'Good';
+            } else {
+                strengthMeter.style.backgroundColor = '#27ae60';
+                strengthLabel = 'Strong';
+            }
+            
+            strengthText.textContent = strengthLabel;
+        });
+        
+        // Basic form validation
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email');
+            const password = document.getElementById('login-password');
+            let valid = true;
+            
+            if (!validateEmail(email.value)) {
+                email.classList.add('error');
+                email.nextElementSibling.style.display = 'block';
+                valid = false;
+            } else {
+                email.classList.remove('error');
+                email.nextElementSibling.style.display = 'none';
+            }
+            
+            if (password.value.length < 1) {
+                password.classList.add('error');
+                password.nextElementSibling.style.display = 'block';
+                valid = false;
+            } else {
+                password.classList.remove('error');
+                password.nextElementSibling.style.display = 'none';
+            }
+            
+            if (valid) {
+                alert('Login successful! Redirecting to dashboard...');
+                // In a real application, this would submit the form or use AJAX
+            }
+        });
+        
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name');
+            const email = document.getElementById('signup-email');
+            const password = document.getElementById('signup-password');
+            const confirm = document.getElementById('signup-confirm');
+            let valid = true;
+            
+            if (name.value.length < 2) {
+                name.classList.add('error');
+                name.nextElementSibling.style.display = 'block';
+                valid = false;
+            } else {
+                name.classList.remove('error');
+                name.nextElementSibling.style.display = 'none';
+            }
+            
+            if (!validateEmail(email.value)) {
+                email.classList.add('error');
+                email.nextElementSibling.style.display = 'block';
+                valid = false;
+            } else {
+                email.classList.remove('error');
+                email.nextElementSibling.style.display = 'none';
+            }
+            
+            if (password.value.length < 8) {
+                password.classList.add('error');
+                password.nextElementSibling.nextElementSibling.style.display = 'block';
+                valid = false;
+            } else {
+                password.classList.remove('error');
+                password.nextElementSibling.nextElementSibling.style.display = 'none';
+            }
+            
+            if (password.value !== confirm.value) {
+                confirm.classList.add('error');
+                confirm.nextElementSibling.style.display = 'block';
+                valid = false;
+            } else {
+                confirm.classList.remove('error');
+                confirm.nextElementSibling.style.display = 'none';
+            }
+            
+            if (valid) {
+                alert('Account created successfully! Please check your email to verify your account.');
+                // In a real application, this would submit the form or use AJAX
+            }
+        });
+        
+        // Email validation helper
+        function validateEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+    </script>
+</body>
+</html>
